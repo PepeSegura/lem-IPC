@@ -6,12 +6,16 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:42:44 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/05 21:21:36 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/05 21:47:36 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DISPLAY_H
 # define DISPLAY_H
+
+# include "shared.h"
+# include "libft.h"
+# include "keys.h"
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -20,8 +24,6 @@
 # include <fcntl.h>
 # include <math.h>
 
-# include "libft.h"
-# include "keys.h"
 
 # define SCREEN_WIDTH 1920
 # define SCREEN_HEIGHT 1080
