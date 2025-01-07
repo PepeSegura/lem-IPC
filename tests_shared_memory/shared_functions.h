@@ -17,7 +17,7 @@
 typedef struct s_game
 {
     int players;
-    char board[BOARD_HEIGHT][BOARD_WIDTH];
+    char board[BOARD_HEIGHT][BOARD_WIDTH + 1];
     char msg[BLOCK_SIZE];
 } t_game;
 

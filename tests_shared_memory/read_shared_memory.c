@@ -7,8 +7,7 @@ void print_board(t_game *game)
     int i = 0;
     while (i < BOARD_HEIGHT)
     {
-        write(1, game->board[i], BOARD_WIDTH);
-        write(1, "\n", 1);
+        printf("%s\n", game->board[i]);
         i++;
     }
 }

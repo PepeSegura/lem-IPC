@@ -3,6 +3,8 @@
 void fill_board(t_game *game)
 {
     memset(game->board, '0', sizeof(game->board));
+    for (int i = 0; i < BOARD_HEIGHT; i++)
+        game->board[i][BOARD_WIDTH] = '\0';
 }
 
 int main(int argc, char **argv)
