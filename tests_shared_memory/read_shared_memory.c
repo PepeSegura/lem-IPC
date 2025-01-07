@@ -3,13 +3,8 @@
 void print_board(t_game *game)
 {
     printf("printing board\n");
-
-    int i = 0;
-    while (i < BOARD_HEIGHT)
-    {
+    for (int i = 0; i < BOARD_HEIGHT; i++)
         printf("%s\n", game->board[i]);
-        i++;
-    }
 }
 
 int main(void)
