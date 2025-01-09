@@ -10,7 +10,7 @@ void fill_board(t_game *game)
 int main(int argc, char **argv)
 {
     if (argc != 2)
-        ft_error("Not enough arguments.");
+        ft_error("Invalid number of arguments.");
 
     if (strlen(argv[1]) >= BLOCK_SIZE)
         ft_error("Msg bigger than memory block.");
