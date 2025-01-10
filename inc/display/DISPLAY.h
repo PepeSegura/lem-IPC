@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:42:44 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/05 21:47:36 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/10 21:01:36 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,43 @@
 # define SCREEN_WIDTH 1920
 # define SCREEN_HEIGHT 1080
 
-# define R 3
-# define G 2
-# define B 1
-# define A 0
-# define ABGR 4
+enum s_letters {
+	BLANK,
+	A,
+	B,
+	C,
+	D,
+	E,
+	F,
+	G,
+	H,
+	I,
+	J,
+	K,
+	L,
+	M,
+	N,
+	O,
+	P,
+	Q,
+	R,
+	S,
+	T,
+	U,
+	V,
+	W,
+	X,
+	Y,
+	Z,
+};
 
-typedef union u_color
-{
-	uint32_t	color;
-	uint8_t		channels[ABGR];
-}	t_color;
-
-typedef struct s_map
-{
-}	t_map;
+# define TEXTURES_COUNT 37
 
 typedef struct s_display
 {
-	mlx_t		*mlx;
-	mlx_image_t	*img;
+	mlx_t			*mlx;
+	mlx_image_t		*img;
+	mlx_image_t		**images;
 }	t_display;
 
 
