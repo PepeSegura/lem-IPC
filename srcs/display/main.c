@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 18:58:58 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/10 21:16:00 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/20 14:46:52 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char  *gen_name(char letter)
 
 void	load_textures(t_display *display)
 {
-	display->images = ft_calloc(sizeof(mlx_image_t *), (TEXTURES_COUNT + 1));
+	// display->images = ft_calloc(sizeof(mlx_image_t *), (TEXTURES_COUNT + 1));
 	mlx_texture_t *new_texture;
 
 	new_texture =  mlx_load_png("sprites/blank.png");
@@ -49,7 +49,8 @@ void	load_textures(t_display *display)
 		char *name = gen_name(letter);
 		printf("name: %s\n", name);
 		mlx_texture_t *new_texture = mlx_load_png(name);
-		display->images[i] = mlx_texture_to_image(display->mlx, new_texture);
+		display->images[letter] = mlx_texture_to_image(display->mlx, new_texture);
+		printf("%p\n", display->images[letter]);
 		mlx_delete_texture(new_texture);
 		free(name);
 	}
@@ -85,14 +86,47 @@ void	mlx_stuff(t_display *display)
 		ft_error("Can't load img");
 	display->img = img;
 	drawn_map(display);
-	mlx_image_to_window(mlx, display->images[A], 10*64, 10 * 64);
-	mlx_image_to_window(mlx, display->images[B], 2*64, 4*64);
-	mlx_image_to_window(mlx, display->images[C], 22*64, 15*64);
-	mlx_image_to_window(mlx, display->images[D], 32*64, 16*64);
+	mlx_image_to_window(mlx, display->images['a'], 10*64, 10 * 64);
+	mlx_image_to_window(mlx, display->images['b'], 2*64, 4*64);
+	mlx_image_to_window(mlx, display->images['c'], 22*64, 15*64);
+	mlx_image_to_window(mlx, display->images['d'], 32*64, 16*64);
 
 	mlx_key_hook(mlx, my_key_hook, display);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
+}
+
+void print_board(t_shared *game)
+{
+    if (game->players == 0)
+        ft_error("Empty map.");
+    printf("printing board\n");
+    for (int i = 0; i < BOARD_HEIGHT; i++)
+        printf("%s\n", game->board[i]);
+}
+
+void load_shared_memory(t_display *display)
+{
+	(void)display;
+	void *memory_block;
+
+	for (int i = 0; i < 60; i++)
+	{	
+		memory_block = attach_memory_block(FILENAME, sizeof(t_shared), false);
+		if (memory_block == NULL)
+		{
+			ft_dprintf(1, "%d/60: Trying to load shared memory, launch a player to generate the board.\n", i);
+			sleep(1);
+		}
+		else
+			break;
+	}
+
+    t_shared *game = (t_shared *)memory_block;
+    printf("players: %d\n", game->players);
+    print_board(game);
+    printf("MSG: {%s}\n", game->msg);
+    printf("dettach: %d\n", dettach_memory_block(memory_block));
 }
 
 int	main(void)
@@ -100,6 +134,8 @@ int	main(void)
 	t_display display;
 
 	ft_bzero(&display, sizeof(t_display));
+	
+	load_shared_memory(&display);
 	mlx_stuff(&display);
 	exit(EXIT_SUCCESS);
 }

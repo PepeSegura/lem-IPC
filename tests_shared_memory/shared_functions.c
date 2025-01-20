@@ -13,7 +13,7 @@ void	ft_error(char *str)
 	exit(EXIT_FAILURE);
 }
 
-static int get_shared_block(char *filename, int size)
+static int get_or_create_shared_block(char *filename, int size)
 {
     const int key = ftok(filename, 0);
     printf("Key: %d Size: %d\n", key, size);

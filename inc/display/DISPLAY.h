@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:42:44 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/10 21:01:36 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/20 14:45:31 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define DISPLAY_H
 
 # include "shared.h"
-# include "libft.h"
 # include "keys.h"
 
 # include <stdio.h>
@@ -64,7 +63,8 @@ typedef struct s_display
 {
 	mlx_t			*mlx;
 	mlx_image_t		*img;
-	mlx_image_t		**images;
+	mlx_image_t		*images[255];
+	t_shared		*data;
 }	t_display;
 
 
