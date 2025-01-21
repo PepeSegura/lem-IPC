@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 21:26:50 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/17 14:47:42 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:22:29 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,13 @@ int main(int argc, char **argv)
     if (argc != 2)
         ft_error("Invalid number of arguments.");
 
-    if (strlen(argv[1]) >= BLOCK_SIZE)
-        ft_error("Msg bigger than memory block.");
+    if (ft_strlen(argv[1]) > 1)
+        ft_error("Player team must be a letter.");
 
     printf("Hello, this is a player!!\n");
 
     printf("sizeof(t_shared) = %ld\n", sizeof(t_shared));
     void *memory_block = attach_memory_block(FILENAME, sizeof(t_shared), true);
-
     if (memory_block == NULL)
     {
         ft_error("Can't load shared memory.");
@@ -43,7 +42,7 @@ int main(int argc, char **argv)
     {
         game->players = 42;
         fill_board(game);
-        game->board[0][0] = 'A';
+        game->board[0][0] = ft_tolower(argv[1][0]);
     }
     else
         game->board[0][0] = argv[1][0];

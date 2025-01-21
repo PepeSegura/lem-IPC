@@ -48,7 +48,7 @@ OBJS_DEL       = $(patsubst srcs/%.c, objs/srcs/%.o, $(DEL_MEM))
 
 DEPS_D       = $(OBJS_D:.o=.d)
 DEPS_P       = $(OBJS_P:.o=.d)
-DEPS_DEL       = $(OBJS_DEL:.o=.d)
+DEPS_DEL     = $(OBJS_DEL:.o=.d)
 
 all: $(NAME_DISPLAY) $(NAME_PLAYER) $(NAME_DEL)
 
@@ -72,6 +72,7 @@ objs/srcs/%.o: ./srcs/%.c
 	@$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf "Compiling: $(notdir $<)\n"
 
 clean:
+	./$(NAME_DEL)
 	@rm -rf objs
 	@rm -rf $(LIBMLX)/build
 	@make fclean -C $(LIBFT)

@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 21:27:37 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/20 14:45:33 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:27:22 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include <sys/ipc.h>
 # include <sys/shm.h>
 
-# define BOARD_WIDTH    30
-# define BOARD_HEIGHT   30
+# define BOARD_WIDTH    10
+# define BOARD_HEIGHT   10
 
 # define BLOCK_SIZE     1024
 # define FILENAME       "Makefile"
