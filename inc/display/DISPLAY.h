@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:42:44 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/20 14:45:31 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:16:17 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_display
 	mlx_image_t		*img;
 	mlx_image_t		*images[255];
 	t_shared		*data;
+	sem_t			*sem;
 }	t_display;
 
 

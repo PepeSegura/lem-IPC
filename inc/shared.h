@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 21:27:37 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/21 14:27:22 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/21 20:07:11 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,16 @@
 
 # include "libft.h"
 
+# include <fcntl.h>
 # include <unistd.h>
+# include <semaphore.h>
 # include <string.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/ipc.h>
 # include <sys/shm.h>
+# include <sys/stat.h>
 
 # define BOARD_WIDTH    10
 # define BOARD_HEIGHT   10
@@ -29,9 +32,12 @@
 # define BLOCK_SIZE     1024
 # define FILENAME       "Makefile"
 
+# define SEM_NAME       "/sem_name"
+
 typedef struct s_shared
 {
     int players;
+    int paint;
     char board[BOARD_HEIGHT][BOARD_WIDTH + 1];
     char msg[BLOCK_SIZE];
 } t_shared;

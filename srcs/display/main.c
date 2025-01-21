@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 18:58:58 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/21 16:21:15 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:58:14 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,17 +56,26 @@ void drawn_map(t_display *display)
 	int i, j;
 
 	i = 0;
+	sem_wait(display->sem);
+	if (display->data->paint == 0)
+	{
+		sem_post(display->sem);
+		return ;
+	}
+	printf("PAINT\n");
 	while (i < BOARD_HEIGHT)
 	{
 		j = 0;
 		while (j < BOARD_WIDTH)
 		{
-			int letter = display->data->board[i][j];
+			int letter = ft_tolower(display->data->board[i][j]);
 			mlx_image_to_window(display->mlx, display->images[letter], j * 64, i * 64);
 			j++;
 		}
 		i++;
 	}
+	display->data->paint = 0;
+	sem_post(display->sem);
 }
 
 void loop_hook(void *param)
@@ -76,7 +85,7 @@ void loop_hook(void *param)
 
 	display = (t_display *)param;
 	time += display->mlx->delta_time;
-	if (time >= 1.0)
+	if (time >= 0.5)
 	{
 		printf("time %f\n", time);
 		time = 0.0;
@@ -118,7 +127,7 @@ void load_shared_memory(t_display *display)
 	void *memory_block;
 
 	for (int i = 1; i <= 60; i++)
-	{	
+	{
 		memory_block = attach_memory_block(FILENAME, sizeof(t_shared), false);
 		if (memory_block == NULL)
 		{
@@ -131,18 +140,23 @@ void load_shared_memory(t_display *display)
 			break;
 	}
 
+	display->sem = sem_open(SEM_NAME, O_WRONLY);
+	perror("sem");
+	sem_wait(display->sem);
     t_shared *data = (t_shared *)memory_block;
     printf("players: %d\n", data->players);
     print_board(data);
     printf("MSG: {%s}\n", data->msg);
     // printf("dettach: %d\n", dettach_memory_block(memory_block));
 	display->data = data;
+	sem_post(display->sem);
 }
 
 int	main(void)
 {
 	// daemon(1, 0);
 	t_display display = {0};
+	
 
 	load_shared_memory(&display);
 	mlx_stuff(&display);
