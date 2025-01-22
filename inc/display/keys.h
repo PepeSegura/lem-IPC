@@ -6,14 +6,12 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:02:24 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/05 20:52:58 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:33:33 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef KEYS_H
 # define KEYS_H
-
-# include "MLX42/MLX42.h"
 
 # define ESC    MLX_KEY_ESCAPE
 

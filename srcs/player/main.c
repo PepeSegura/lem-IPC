@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 21:26:50 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/21 20:05:48 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:39:55 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,59 @@ void set_random_player_pos(t_shared *shared, t_player *player)
     sem_post(player->sem);
     sem_close(player->sem);
     ft_error("Map is full.");
+}
+
+void	close_player(t_player *player)
+{
+	ft_printf("Escape!\n");
+	mlx_terminate(player->mlx);
+	if (player->sem != SEM_FAILED)
+		sem_close(player->sem);
+	exit(0);
+}
+
+void	my_key_hook(mlx_key_data_t keydata, void *param)
+{
+	if (!number_in_array(1, (int []){MLX_PRESS}, keydata.action))
+		return ;
+	if (keydata.key == ESC)
+		close_player((t_player *)param);
+}
+
+void	load_textures(t_player *player)
+{
+	mlx_texture_t *new_texture;
+
+	new_texture =  mlx_load_png("sprites/blank.png");
+	player->images['0'] = mlx_texture_to_image(player->mlx, new_texture);
+	mlx_delete_texture(new_texture);
+
+	for (unsigned char letter = 'a'; letter <= 'z'; letter++)
+	{
+		char *name = gen_name(letter);
+		mlx_texture_t *new_texture = mlx_load_png(name);
+		player->images[letter] = mlx_texture_to_image(player->mlx, new_texture);
+		mlx_delete_texture(new_texture);
+		free(name);
+	}
+}
+
+void	mlx_stuff(t_player *player)
+{
+	mlx_t		*mlx;
+	mlx_image_t	*img;
+
+	mlx = init_and_customize_mlx();
+	player->mlx = mlx;
+	load_textures(player);
+	img = mlx_new_image(mlx, BOARD_WIDTH * 64, BOARD_HEIGHT * 64);
+	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
+		ft_error("Can't load img");
+	player->img = img;
+	drawn_map(player);
+	mlx_key_hook(mlx, my_key_hook, player);
+	mlx_loop(mlx);
+	mlx_terminate(mlx);
 }
 
 int main(int argc, char **argv)
@@ -107,5 +160,6 @@ int main(int argc, char **argv)
     sprintf(game->msg, "%s", argv[1]);
     printf("dettach: %d\n", dettach_memory_block(memory_block));
     sem_post(sem);
+    mlx_stuff(&player);
     sem_close(sem);
 }

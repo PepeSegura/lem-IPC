@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:42:44 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/21 19:16:17 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:32:37 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define DISPLAY_H
 
 # include "shared.h"
-# include "keys.h"
+
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -26,36 +26,6 @@
 
 # define SCREEN_WIDTH 1920
 # define SCREEN_HEIGHT 1080
-
-enum s_letters {
-	BLANK,
-	A,
-	B,
-	C,
-	D,
-	E,
-	F,
-	G,
-	H,
-	I,
-	J,
-	K,
-	L,
-	M,
-	N,
-	O,
-	P,
-	Q,
-	R,
-	S,
-	T,
-	U,
-	V,
-	W,
-	X,
-	Y,
-	Z,
-};
 
 # define TEXTURES_COUNT 37
 

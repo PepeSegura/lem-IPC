@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 18:58:58 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/21 19:58:14 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/22 10:06:08 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ void load_shared_memory(t_display *display)
     printf("MSG: {%s}\n", data->msg);
     // printf("dettach: %d\n", dettach_memory_block(memory_block));
 	display->data = data;
+	display->data->paint = 1;
 	sem_post(display->sem);
 }
 

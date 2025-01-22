@@ -6,14 +6,16 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 21:27:37 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/21 20:07:11 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:33:51 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SHARED_H
 # define SHARED_H
 
+# include "keys.h"
 # include "libft.h"
+# include "MLX42/MLX42.h"
 
 # include <fcntl.h>
 # include <unistd.h>
