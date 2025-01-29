@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 21:27:37 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/22 12:33:51 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/29 20:18:53 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,15 @@
 
 typedef struct s_shared
 {
+    int started;
     int players;
     int paint;
     char board[BOARD_HEIGHT][BOARD_WIDTH + 1];
     char msg[BLOCK_SIZE];
 } t_shared;
 
+
+bool	number_in_array(int len, const int array[len], int to_find);
 
 void	ft_perror(char *msg);
 void	ft_error(char *str);

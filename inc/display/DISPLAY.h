@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:42:44 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/22 12:32:37 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:33:02 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,16 @@ typedef struct s_display
 }	t_display;
 
 
+mlx_t	*init_and_customize_mlx(void);
+void	load_textures(t_display *display);
+
 /* Hooks and tools */
 
 void	my_key_hook(mlx_key_data_t keydata, void *param);
-bool	number_in_array(int len, const int array[len], int to_find);
+// bool	number_in_array(int len, const int array[len], int to_find);
 
-/* errors.c */
-void		ft_perror(char *msg);
-void		ft_error(char *str);
+// /* errors.c */
+// void		ft_perror(char *msg);
+// void		ft_error(char *str);
 
 #endif
