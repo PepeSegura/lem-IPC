@@ -23,18 +23,12 @@ char  *gen_name(char letter)
 
 void	load_textures(t_display *display)
 {
-	mlx_texture_t *new_texture;
-
-	new_texture =  mlx_load_png("sprites/blank.png");
-	display->images['0'] = mlx_texture_to_image(display->mlx, new_texture);
-	mlx_delete_texture(new_texture);
+	display->images['0'] = mlx_load_img(display->mlx, "sprites/blank.png");
 
 	for (unsigned char letter = 'a'; letter <= 'z'; letter++)
 	{
 		char *name = gen_name(letter);
-		mlx_texture_t *new_texture = mlx_load_png(name);
-		display->images[letter] = mlx_texture_to_image(display->mlx, new_texture);
-		mlx_delete_texture(new_texture);
+		display->images[letter] = mlx_load_img(display->mlx, name);
 		free(name);
 	}
 }

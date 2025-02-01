@@ -18,24 +18,38 @@
 # include <time.h>
 # include <sys/time.h>
 
+# define TILE_WIDTH 128
+
 typedef struct s_game
 {
-    mlx_t			*mlx;
-	mlx_image_t		*img;
-	mlx_image_t		*images[4];
-    int x;
-    int y;
-    int status;
-    sem_t *sem;
+    char        letter;
+    mlx_t		*mlx;
+	mlx_image_t	*img;
+    mlx_image_t *str_img;
+	mlx_image_t	*images[4];
+    int         x;
+    int         y;
+    int         status;
+    sem_t       *sem;
+    t_shared    *shared;
 } t_game;
 
 
+typedef enum cords {
+
+    UP,
+    LEFT,
+    RIGHT,
+    DOWN,
+} cords;
+
+char *get_player_pos(int x, int y);
 /* parser */
 char    parser(int argc, char **argv);
 
 /* init_game */
-void    init_game(t_shared *shared);
-void    init_semaphores(t_game *game);
+void        init_game(t_shared *shared);
+void        init_semaphores(t_game *game);
 t_shared    *attach_or_create_shared_memory(void);
 
 /* init_player */

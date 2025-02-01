@@ -2,11 +2,12 @@
 
 void	load_textures(t_game *player)
 {
-	mlx_texture_t *new_texture;
-
-	new_texture =  mlx_load_png("sprites/blank.png");
-	player->images[0] = mlx_texture_to_image(player->mlx, new_texture);
-	mlx_delete_texture(new_texture);
+	player->images[0] = mlx_load_img(player->mlx, "sprites/UP.png");
+	player->images[1] = mlx_load_img(player->mlx, "sprites/LEFT.png");
+	player->images[2] = mlx_load_img(player->mlx, "sprites/RIGHT.png");
+	player->images[3] = mlx_load_img(player->mlx, "sprites/DOWN.png");
+	for (int i = 0; i < 4; i++)
+		mlx_resize_image(player->images[i], player->images[i]->width * 2, player->images[i]->height * 2);
 }
 
 mlx_t	*init_and_customize_mlx(void)
@@ -14,7 +15,7 @@ mlx_t	*init_and_customize_mlx(void)
 	mlx_t				*mlx;
 	mlx_win_cursor_t	*cursor;
 
-	mlx = mlx_init(BOARD_WIDTH * 64, BOARD_HEIGHT * 64, "board", false);
+	mlx = mlx_init(TILE_WIDTH * 3, TILE_WIDTH * 3, "player", false);
 	if (mlx == NULL)
 		ft_error("Can't load mlx");
 	cursor = mlx_create_std_cursor(MLX_CURSOR_CROSSHAIR);

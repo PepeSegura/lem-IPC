@@ -6,25 +6,37 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 21:26:50 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/29 20:37:52 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/02/01 21:01:23 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "GAME.h"
 
-void	mlx_stuff(t_game *player)
+
+void	mlx_stuff(t_game *game)
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 
 	mlx = init_and_customize_mlx();
-	player->mlx = mlx;
-	// load_textures(player);
-	img = mlx_new_image(mlx, BOARD_WIDTH * 64, BOARD_HEIGHT * 64);
+	game->mlx = mlx;
+	load_textures(game);
+	img = mlx_new_image(mlx, TILE_WIDTH * 3, TILE_WIDTH * 3);
 	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
 		ft_error("Can't load img");
-	player->img = img;
-	mlx_key_hook(mlx, my_key_hook, player);
+	game->img = img;
+
+	char *player_pos = get_player_pos(game->x, game->y);
+	game->str_img = mlx_put_string(game->mlx, player_pos, 0, 0);
+	free(player_pos);
+
+    mlx_image_to_window(game->mlx, game->images[UP], TILE_WIDTH, 0 + TILE_WIDTH);
+    mlx_image_to_window(game->mlx, game->images[LEFT], 0, TILE_WIDTH + TILE_WIDTH);
+    mlx_image_to_window(game->mlx, game->images[RIGHT], TILE_WIDTH * 2, TILE_WIDTH + TILE_WIDTH);
+    mlx_image_to_window(game->mlx, game->images[DOWN], TILE_WIDTH, TILE_WIDTH + TILE_WIDTH);
+
+    
+	mlx_key_hook(mlx, my_key_hook, game);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 }
@@ -51,8 +63,8 @@ int main(int argc, char **argv)
     init_game(shared);
     init_player(&player, shared, team_name);
     
-    printf("dettach: %d\n", dettach_memory_block((void *)shared));
     sem_post(player.sem);
     mlx_stuff(&player);
+    printf("dettach: %d\n", dettach_memory_block((void *)shared));
     sem_close(player.sem);
 }

@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 21:27:37 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/29 20:18:53 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/02/01 18:16:31 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,12 @@ typedef struct s_shared
     char msg[BLOCK_SIZE];
 } t_shared;
 
-
-bool	number_in_array(int len, const int array[len], int to_find);
+mlx_image_t *mlx_load_img(mlx_t *mlx, char *name);
+bool        number_in_array(int len, const int array[len], int to_find);
 
 void	ft_perror(char *msg);
 void	ft_error(char *str);
+void    ft_mlx_error(void);
 
 void    *attach_memory_block(char *filename, int size, bool create);
 int     dettach_memory_block(char *memory_block);
