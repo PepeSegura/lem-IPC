@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 18:58:58 by psegura-          #+#    #+#             */
-/*   Updated: 2025/01/29 20:29:28 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:51:22 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void load_shared_memory(t_display *display)
 
 int	main(void)
 {
-	// daemon(1, 0);
+	daemon(1, 0);
 	t_display display = {0};
 
 	load_shared_memory(&display);

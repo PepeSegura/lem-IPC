@@ -9,17 +9,16 @@ void	close_player(t_game *player)
 	exit(0);
 }
 
+
+
 char *get_player_pos(int x, int y)
 {
 	char *str_x = ft_itoa(x);
 	char *str_y = ft_itoa(y);
+	char *final = ft_ultrajoin("Player pos: (", str_x, ",", str_y, ")", NULL);
 
-	char *first = ft_strjoin("Player pos: (", str_x);
-	char *middle = ft_strjoin(first, ",");
-	char *second = ft_strjoin(middle, str_y);
-	char *player_pos = ft_strjoin(second, ")");
-	free(str_x), free(str_y), free(first), free(middle), free(second);
-	return (player_pos);
+	free(str_x), free(str_y);
+	return (final);
 }
 
 void	movement(t_game *game, int key)

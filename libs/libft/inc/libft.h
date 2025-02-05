@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psegura- <psegura-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 16:44:42 by psegura-          #+#    #+#             */
-/*   Updated: 2024/08/01 21:33:45 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:17:05 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ char		*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char		*ft_strchr(const char *s, int c);
 char		*ft_strrchr(const char *s, int c);
 char		*ft_strjoin(char *s1, char *s2);
+char		*ft_ultrajoin(char *first, ...);
 char		*ft_strdup(const char *s1);
 char		*ft_strndup(const char *s1, int len);
 char		*ft_strmapi(char const *s, char (*f)(unsigned int, char));

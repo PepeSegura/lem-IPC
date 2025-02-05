@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:57:11 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/01 19:31:53 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:35:29 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,30 @@ char	*ft_strjoin(char *s1, char *s2)
 		j++;
 	}
 	return (str);
+}
+
+char	*ft_ultrajoin(char *first, ...)
+{
+	va_list	list;
+	char	*result;
+	char	*tmp;
+	char	*next;
+
+	if (first == NULL)
+		return (NULL);
+	result = ft_strdup(first);
+	if (!result)
+		return (NULL);
+	va_start(list, first);
+	while (1)
+	{
+		next = va_arg(list, char *);
+		if (next == NULL)
+			break ;
+		tmp = ft_strjoin(result, next);
+		free(result);
+		result = tmp;
+	}
+	va_end(list);
+	return (result);
 }
