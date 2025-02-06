@@ -29,7 +29,7 @@ SHARED		=									\
 DISPLAY      = 									\
 				srcs/display/main.c				\
 												\
-               	srcs/display/mlx/init.c			\
+               	srcs/display/mlx/init_mlx.c		\
                	srcs/display/mlx/hooks.c		\
 												\
                	$(SHARED)
@@ -43,7 +43,7 @@ GAME       = 										\
 				srcs/game/init_player/init_player.c	\
 				srcs/game/init_game/init_structs.c	\
 													\
-				srcs/game/mlx/init.c				\
+				srcs/game/mlx/init_mlx.c			\
                	srcs/game/mlx/hooks.c				\
                	$(SHARED)
 

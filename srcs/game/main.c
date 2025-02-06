@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 21:26:50 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/01 21:01:23 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:46:13 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,16 @@ void	mlx_stuff(t_game *game)
 	mlx = init_and_customize_mlx();
 	game->mlx = mlx;
 	load_textures(game);
-	img = mlx_new_image(mlx, TILE_WIDTH * 3, TILE_WIDTH * 3);
+	img = mlx_new_image(mlx, TILE * 3, TILE * 3);
 	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
 		ft_error("Can't load img");
 	game->img = img;
 
 	char *player_pos = get_player_pos(game->x, game->y);
-	game->str_img = mlx_put_string(game->mlx, player_pos, 0, 0);
+	game->str_img = mlx_put_string(game->mlx, player_pos, TILE / 10, TILE / 10);
 	free(player_pos);
 
-    mlx_image_to_window(game->mlx, game->images[UP], TILE_WIDTH, 0 + TILE_WIDTH);
-    mlx_image_to_window(game->mlx, game->images[LEFT], 0, TILE_WIDTH + TILE_WIDTH);
-    mlx_image_to_window(game->mlx, game->images[RIGHT], TILE_WIDTH * 2, TILE_WIDTH + TILE_WIDTH);
-    mlx_image_to_window(game->mlx, game->images[DOWN], TILE_WIDTH, TILE_WIDTH + TILE_WIDTH);
-
-    
+    draw_minimap(game);
 	mlx_key_hook(mlx, my_key_hook, game);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);

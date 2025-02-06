@@ -13,12 +13,9 @@ mlx_t	*init_and_customize_mlx(void)
 	return (mlx);
 }
 
-char  *gen_name(char letter)
+char  *gen_filename(char letter)
 {
-	char *letter_arr = malloc(30 * sizeof(char));
-
-	sprintf(letter_arr, "sprites/%c.png", letter);
-	return (letter_arr);
+	return (ft_ultrajoin("sprites/", (char [2]){letter, '\0'}, ".png", NULL));
 }
 
 void	load_textures(t_display *display)
@@ -27,7 +24,7 @@ void	load_textures(t_display *display)
 
 	for (unsigned char letter = 'a'; letter <= 'z'; letter++)
 	{
-		char *name = gen_name(letter);
+		char *name = gen_filename(letter);
 		display->images[letter] = mlx_load_img(display->mlx, name);
 		free(name);
 	}

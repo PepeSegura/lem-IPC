@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 18:58:58 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/05 16:51:22 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:51:52 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void drawn_map(t_display *display)
 
 	i = 0;
 	sem_wait(display->sem);
-	if (display->data->paint == 0)
+	if (display->shared->paint == 0)
 	{
 		sem_post(display->sem);
 		return ;
@@ -29,13 +29,13 @@ void drawn_map(t_display *display)
 		j = 0;
 		while (j < BOARD_WIDTH)
 		{
-			int letter = ft_tolower(display->data->board[i][j]);
+			int letter = ft_tolower(display->shared->board[i][j]);
 			mlx_image_to_window(display->mlx, display->images[letter], j * 64, i * 64);
 			j++;
 		}
 		i++;
 	}
-	display->data->paint = 0;
+	display->shared->paint = 0;
 	sem_post(display->sem);
 }
 
@@ -104,19 +104,19 @@ void load_shared_memory(t_display *display)
 	display->sem = sem_open(SEM_NAME, O_WRONLY);
 	perror("sem");
 	sem_wait(display->sem);
-    t_shared *data = (t_shared *)memory_block;
-    printf("players: %d\n", data->players);
-    print_board(data);
-    printf("MSG: {%s}\n", data->msg);
+    t_shared *shared = (t_shared *)memory_block;
+    printf("players: %d\n", shared->players);
+    print_board(shared);
+    printf("MSG: {%s}\n", shared->msg);
     // printf("dettach: %d\n", dettach_memory_block(memory_block));
-	display->data = data;
-	display->data->paint = 1;
+	display->shared = shared;
+	display->shared->paint = 1;
 	sem_post(display->sem);
 }
 
 int	main(void)
 {
-	daemon(1, 0);
+	// daemon(1, 0);
 	t_display display = {0};
 
 	load_shared_memory(&display);

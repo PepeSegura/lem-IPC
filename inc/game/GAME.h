@@ -18,7 +18,7 @@
 # include <time.h>
 # include <sys/time.h>
 
-# define TILE_WIDTH 128
+# define TILE 64
 
 typedef struct s_game
 {
@@ -26,7 +26,7 @@ typedef struct s_game
     mlx_t		*mlx;
 	mlx_image_t	*img;
     mlx_image_t *str_img;
-	mlx_image_t	*images[4];
+	mlx_image_t	*images[255];
     int         x;
     int         y;
     int         status;
@@ -34,14 +34,7 @@ typedef struct s_game
     t_shared    *shared;
 } t_game;
 
-
-typedef enum cords {
-
-    UP,
-    LEFT,
-    RIGHT,
-    DOWN,
-} cords;
+# define WALL 0
 
 char *get_player_pos(int x, int y);
 /* parser */
@@ -57,6 +50,7 @@ void init_player(t_game *player, t_shared *shared, char team_name);
 
 /* mlx */
 mlx_t	*init_and_customize_mlx(void);
+void    draw_minimap(t_game *game);
 
 void	my_key_hook(mlx_key_data_t keydata, void *param);
 void	load_textures(t_game *player);

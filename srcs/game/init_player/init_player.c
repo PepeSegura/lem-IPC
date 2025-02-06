@@ -41,4 +41,5 @@ void init_player(t_game *game, t_shared *shared, char team_name)
     game->letter = ft_tolower(team_name);
     shared->board[game->y][game->x] = game->letter;
     shared->paint = 1;
+    shared->players++;
 }

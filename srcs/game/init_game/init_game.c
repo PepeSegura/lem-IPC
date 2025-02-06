@@ -13,6 +13,7 @@ void    init_game(t_shared *shared)
     {
         shared->started = 1;
         shared->paint = 1;
+        shared->players = 0;
         fill_board(shared);
     }
 }
