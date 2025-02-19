@@ -1,17 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/05 21:26:50 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/06 16:46:13 by psegura-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "GAME.h"
-
 
 void	mlx_stuff(t_game *game)
 {
@@ -20,7 +7,8 @@ void	mlx_stuff(t_game *game)
 
 	mlx = init_and_customize_mlx();
 	game->mlx = mlx;
-	load_textures(game);
+	if (load_textures(game) == NULL)
+        leave_board(game);
 	img = mlx_new_image(mlx, TILE * 3, TILE * 3);
 	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
 		ft_error("Can't load img");

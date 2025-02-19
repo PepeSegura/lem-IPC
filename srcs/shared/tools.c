@@ -7,10 +7,16 @@ mlx_image_t	*mlx_load_img(mlx_t *mlx, char *name)
 
 	new_texture = mlx_load_png(name);
 	if (new_texture == NULL)
+	{
 		ft_mlx_error();
+		return (NULL);
+	}
 	new_image = mlx_texture_to_image(mlx, new_texture);
 	if (new_image == NULL)
+	{
 		ft_mlx_error();
+		return (NULL);
+	}
 	mlx_delete_texture(new_texture);
 	return (new_image);
 }

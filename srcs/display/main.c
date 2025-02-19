@@ -1,20 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/28 18:58:58 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/06 17:51:52 by psegura-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "DISPLAY.h"
 
-void drawn_map(t_display *display)
+int end_program;
+
+void draw_map(t_display *display)
 {
-	int i, j;
+	int i, j, letter;
 
 	i = 0;
 	sem_wait(display->sem);
@@ -23,13 +13,12 @@ void drawn_map(t_display *display)
 		sem_post(display->sem);
 		return ;
 	}
-	printf("PAINT\n");
 	while (i < BOARD_HEIGHT)
 	{
 		j = 0;
 		while (j < BOARD_WIDTH)
 		{
-			int letter = ft_tolower(display->shared->board[i][j]);
+			letter = display->shared->board[i][j];
 			mlx_image_to_window(display->mlx, display->images[letter], j * 64, i * 64);
 			j++;
 		}
@@ -41,16 +30,17 @@ void drawn_map(t_display *display)
 
 void loop_hook(void *param)
 {
-	static double time = 0.0;
+	static double	time = 0.0;
 	t_display		*display;
 
 	display = (t_display *)param;
 	time += display->mlx->delta_time;
 	if (time >= 0.5)
 	{
-		printf("time %f\n", time);
+		if (end_program == true)
+			close_display(display);
 		time = 0.0;
-		drawn_map(display);
+		draw_map(display);
 	}
 }
 
@@ -61,12 +51,13 @@ void	mlx_stuff(t_display *display)
 
 	mlx = init_and_customize_mlx();
 	display->mlx = mlx;
-	load_textures(display);
+	if (load_textures(display) == NULL)
+		close_board(display);
 	img = mlx_new_image(mlx, BOARD_WIDTH * 64, BOARD_HEIGHT * 64);
 	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
 		ft_error("Can't load img");
 	display->img = img;
-	drawn_map(display);
+	draw_map(display);
 	mlx_key_hook(mlx, my_key_hook, display);
 	mlx_loop_hook(mlx, loop_hook, display);
 	mlx_loop(mlx);
@@ -75,11 +66,10 @@ void	mlx_stuff(t_display *display)
 
 void print_board(t_shared *game)
 {
-    if (game->started == 0)
-        ft_error("Empty map.");
-    printf("printing board\n");
-    for (int i = 0; i < BOARD_HEIGHT; i++)
-        printf("%s\n", game->board[i]);
+	if (game->started == 0)
+		ft_error("Empty map.");
+	for (int i = 0; i < BOARD_HEIGHT; i++)
+		printf("%s\n", game->board[i]);
 }
 
 void load_shared_memory(t_display *display)
@@ -94,8 +84,8 @@ void load_shared_memory(t_display *display)
 		{
 			if (i == 60)
 				exit(1);
-			ft_dprintf(1, "%d/60: Trying to load shared memory, launch a player to generate the board.\n", i);
-			usleep(500 * 1000);
+			dprintf(1, "%d/60: Trying to load shared memory, launch a player to generate the board.\n", i);
+			usleep(1000 * 1000);
 		}
 		else
 			break;
@@ -104,21 +94,32 @@ void load_shared_memory(t_display *display)
 	display->sem = sem_open(SEM_NAME, O_WRONLY);
 	perror("sem");
 	sem_wait(display->sem);
-    t_shared *shared = (t_shared *)memory_block;
-    printf("players: %d\n", shared->players);
-    print_board(shared);
-    printf("MSG: {%s}\n", shared->msg);
-    // printf("dettach: %d\n", dettach_memory_block(memory_block));
+	t_shared *shared = (t_shared *)memory_block;
+	printf("players: %d\n", shared->players);
+	print_board(shared);
+	printf("MSG: {%s}\n", shared->msg);
 	display->shared = shared;
 	display->shared->paint = 1;
+	display->shared->display_pid = getpid();
 	sem_post(display->sem);
+}
+
+void signal_handler(int signum)
+{
+	if (signum == SIGUSR1)
+	{
+		printf("CLOSING DISPLAY\n");
+		end_program = true;
+	}
 }
 
 int	main(void)
 {
-	// daemon(1, 0);
-	t_display display = {0};
+	end_program = false;
+	signal(SIGUSR1, signal_handler);
+	t_display display;
 
+	ft_memset(&display, 0, sizeof(t_display));
 	load_shared_memory(&display);
 	mlx_stuff(&display);
 	exit(EXIT_SUCCESS);

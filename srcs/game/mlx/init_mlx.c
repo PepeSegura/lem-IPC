@@ -5,21 +5,24 @@ char  *gen_filename(char letter)
 	return (ft_ultrajoin("sprites/", (char [2]){letter, '\0'}, ".png", NULL));
 }
 
-void	load_textures(t_game *player)
+void	*load_textures(t_game *player)
 {
-	player->images[WALL]	  = mlx_load_img(player->mlx, "sprites/wall.png");
-
-	// mlx_resize_image(player->images[WALL], player->images[WALL]->width * 2, player->images[WALL]->height * 2);
+	player->images[WALL] = mlx_load_img(player->mlx, "sprites/wall.png");
+	if (player->images[WALL] == NULL)
+		return (NULL);
 
 	player->images['0'] = mlx_load_img(player->mlx, "sprites/blank.png");
-	// mlx_resize_image(player->images['0'], player->images['0']->width * 2, player->images['0']->height * 2);
+	if (player->images['0'] == NULL)
+		return (NULL);
 	for (unsigned char letter = 'a'; letter <= 'z'; letter++)
 	{
 		char *name = gen_filename(letter);
 		player->images[letter] = mlx_load_img(player->mlx, name);
-		// mlx_resize_image(player->images[letter], player->images[letter]->width * 2, player->images[letter]->height * 2);
 		free(name);
+		if (player->images[letter] == NULL)
+			return (NULL);
 	}
+	return((void *)1);
 }
 
 mlx_t	*init_and_customize_mlx(void)

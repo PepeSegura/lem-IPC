@@ -6,20 +6,20 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 21:27:37 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/05 17:30:12 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:12:49 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SHARED_H
 # define SHARED_H
 
-# include "keys.h"
 # include "libft.h"
 # include "MLX42/MLX42.h"
 
 # include <fcntl.h>
 # include <unistd.h>
 # include <semaphore.h>
+# include <signal.h>
 # include <string.h>
 # include <stdbool.h>
 # include <stdio.h>
@@ -41,6 +41,7 @@ typedef struct s_shared
     int started;
     int players;
     int paint;
+    int display_pid;
     char board[BOARD_HEIGHT][BOARD_WIDTH + 1];
     char msg[BLOCK_SIZE];
 } t_shared;
