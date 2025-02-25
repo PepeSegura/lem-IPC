@@ -1,7 +1,7 @@
 MAKEFLAGS    = --no-print-directory --silent
 
 NAME_DISPLAY = display
-NAME_GAME  = lemipc
+NAME_GAME  	 = lemipc
 NAME_DEL	 = clear_memory
 
 CFLAGS       = -Wextra -Wall -Werror
@@ -64,19 +64,23 @@ DEPS_DEL     = $(OBJS_DEL:.o=.d)
 
 all: $(NAME_DISPLAY) $(NAME_GAME) $(NAME_DEL)
 
-libmlx:
-	@cmake -DDEBUG=1 $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
+MLX_LIB = $(LIBMLX)/build/libmlx42.a
 
-libft:
+$(MLX_LIB):
+	@cmake -DDEBUG=0 $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
+
+LIBFT_LIB = $(LIBFT)/libft.a
+
+$(LIBFT_LIB):
 	@make -C $(LIBFT)
 
-$(NAME_DISPLAY): libmlx libft $(OBJS_D)
+$(NAME_DISPLAY): $(MLX_LIB) $(LIBFT_LIB) $(OBJS_D)
 	$(CC) $(DEBUG) $(OBJS_D) $(LIBS) $(HEADERS) -o $(NAME_DISPLAY) && printf "Linking: $(NAME_DISPLAY)\n"
 
-$(NAME_GAME): libmlx libft $(OBJS_G)
+$(NAME_GAME): $(MLX_LIB) $(LIBFT_LIB) $(OBJS_G)
 	$(CC) $(DEBUG) $(OBJS_G) $(LIBS) $(HEADERS) -o $(NAME_GAME) && printf "Linking: $(NAME_GAME)\n"
 
-$(NAME_DEL): libmlx libft $(OBJS_DEL)
+$(NAME_DEL): $(MLX_LIB) $(LIBFT_LIB) $(OBJS_DEL)
 	$(CC) $(DEBUG) $(OBJS_DEL) $(LIBS) $(HEADERS) -o $(NAME_DEL) && printf "Linking: $(NAME_DEL)\n"
 
 objs/srcs/%.o: ./srcs/%.c
@@ -94,6 +98,8 @@ fclean: clean
 
 re: fclean all
 
--include $(DEPS_D) $(DEPS_G) $(DEPS_DEL)
+-include $(DEPS_D)
+-include $(DEPS_G)
+-include $(DEPS_DEL)
 
-.PHONY: all clean fclean re libmlx libft
+.PHONY: all clean fclean re
