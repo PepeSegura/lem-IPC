@@ -43,6 +43,7 @@ void    draw_minimap(t_game *game);
 void	my_key_hook(mlx_key_data_t keydata, void *param);
 void	*load_textures(t_game *player);
 
+void	close_player(t_game *game);
 void    leave_board(t_game *game);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 13:00:46 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/25 16:02:51 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/02/25 17:05:25 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,5 @@ int main(int argc, char **argv)
     
     sem_post(player.sem);
     mlx_stuff(&player);
-    printf("dettach: %d\n", dettach_memory_block((void *)shared));
-    sem_close(player.sem);
+	leave_board(&player);
 }

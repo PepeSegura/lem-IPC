@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:50:25 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/25 15:27:57 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/02/25 17:05:40 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,13 @@ void	leave_board(t_game *game)
 		if (sem_ret == -1)
 		{
 			perror("sem_unlink");
+			printf("dettach: %d\n", dettach_memory_block((void *)game->shared));
 			exit(1);
 		}
 		if (game->shared->display_pid != -42)
 			kill(game->shared->display_pid, SIGUSR1);
 		printf("deleting shared memory\n");
+		printf("dettach: %d\n", dettach_memory_block((void *)game->shared));
 		int	destroy_ret = destroy_memory_block(FILENAME, false);
 		if (destroy_ret == 1)
 			printf("Cannot clear shared memory, close first the display\n");

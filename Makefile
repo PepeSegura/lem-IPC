@@ -9,7 +9,7 @@ CFLAGS      += -I inc -I inc/display -I inc/game
 CFLAGS      += -I libft
 CFLAGS      += -O3
 
-DEBUG        = -g3 -fsanitize=address,leak
+DEBUG        = -g3 -fsanitize=address
 
 CPPFLAGS     = -MMD
 
