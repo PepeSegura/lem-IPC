@@ -1,7 +1,7 @@
 MAKEFLAGS    = --no-print-directory --silent
 
 NAME_DISPLAY = display
-NAME_GAME  = game
+NAME_GAME  = lemipc
 NAME_DEL	 = clear_memory
 
 CFLAGS       = -Wextra -Wall -Werror
@@ -21,33 +21,36 @@ HEADERS      = -I ./inc -I $(LIBMLX)/include -I $(LIBFT)/inc
 LIBS         = $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 LIBS        += $(LIBFT)/libft.a
 
-SHARED		=									\
-				srcs/shared/errors.c			\
-               	srcs/shared/shmemory.c			\
-               	srcs/shared/tools.c				\
+SHARED		=											\
+				srcs/shared/errors.c					\
+               	srcs/shared/shmemory.c					\
+               	srcs/shared/tools.c						\
 
-DISPLAY      = 									\
-				srcs/display/main.c				\
-												\
-               	srcs/display/mlx/init_mlx.c		\
-               	srcs/display/mlx/hooks.c		\
-												\
+DISPLAY      = 											\
+				srcs/display/main.c						\
+														\
+               	srcs/display/mlx/init_mlx.c				\
+               	srcs/display/mlx/hooks.c				\
+               	srcs/display/mlx/draw.c					\
+														\
+				srcs/display/init_data/shared_memory.c	\
+														\
                	$(SHARED)
 
-GAME       = 										\
-				srcs/game/main.c					\
-													\
-				srcs/game/parser/parser.c			\
-													\
-				srcs/game/init_game/init_game.c		\
-				srcs/game/init_player/init_player.c	\
-				srcs/game/init_game/init_structs.c	\
-													\
-				srcs/game/mlx/init_mlx.c			\
-               	srcs/game/mlx/hooks.c				\
+GAME       = 											\
+				srcs/game/main.c						\
+														\
+				srcs/game/parser/parser.c				\
+														\
+				srcs/game/init_game/init_game.c			\
+				srcs/game/init_player/init_player.c		\
+				srcs/game/init_game/init_structs.c		\
+														\
+				srcs/game/mlx/init_mlx.c				\
+               	srcs/game/mlx/hooks.c					\
                	$(SHARED)
 
-DEL_MEM		 =	srcs/clear_memory/main.c 		\
+DEL_MEM		 =	srcs/clear_memory/main.c 				\
                	$(SHARED)
 
 

@@ -27,6 +27,11 @@ typedef struct s_display
 
 extern int	end_program;
 
+/* Init data */
+void load_shared_memory(t_display *display);
+
+/* mlx */
+void	mlx_stuff(t_display *display);
 mlx_t	*init_and_customize_mlx(void);
 void	*load_textures(t_display *display);
 
@@ -34,5 +39,8 @@ void	*load_textures(t_display *display);
 void	my_key_hook(mlx_key_data_t keydata, void *param);
 void	close_display(t_display *display);
 void	*close_board(t_display *display);
+
+/* Draw */
+void draw_map(t_display *display);
 
 #endif

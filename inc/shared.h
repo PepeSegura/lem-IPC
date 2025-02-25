@@ -43,6 +43,6 @@ void    ft_mlx_error(void);
 
 void    *attach_memory_block(char *filename, int size, bool create);
 int     dettach_memory_block(char *memory_block);
-int     destroy_memory_block(char *filename);
+int     destroy_memory_block(char *filename, bool create);
 
 #endif

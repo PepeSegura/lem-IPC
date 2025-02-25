@@ -37,7 +37,7 @@ char *get_player_pos(int x, int y);
 void init_player(t_game *player, t_shared *shared, char team_name);
 
 /* mlx */
-mlx_t	*init_and_customize_mlx(void);
+mlx_t	*init_and_customize_mlx(char *team_name);
 void    draw_minimap(t_game *game);
 
 void	my_key_hook(mlx_key_data_t keydata, void *param);

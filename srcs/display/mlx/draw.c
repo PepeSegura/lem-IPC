@@ -1,37 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hooks.c                                            :+:      :+:    :+:   */
+/*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/25 13:00:26 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/25 13:00:27 by psegura-         ###   ########.fr       */
+/*   Created: 2025/02/25 15:15:34 by psegura-          #+#    #+#             */
+/*   Updated: 2025/02/25 15:15:35 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "DISPLAY.h"
 
-void	*close_board(t_display *display)
+void draw_map(t_display *display)
 {
-	if (display->sem != SEM_FAILED)
-		sem_close(display->sem);
-	exit(0);
-}
+	int i, j, letter;
 
-void	close_display(t_display *display)
-{
-	ft_printf("Escape!\n");
-	mlx_terminate(display->mlx);
-	if (display->sem != SEM_FAILED)
-		sem_close(display->sem);
-	exit(0);
-}
-
-void	my_key_hook(mlx_key_data_t keydata, void *param)
-{
-	if (keydata.action != MLX_PRESS)
+	i = 0;
+	sem_wait(display->sem);
+	if (display->shared->paint == 0)
+	{
+		sem_post(display->sem);
 		return ;
-	if (keydata.key == MLX_KEY_ESCAPE)
-		close_display((t_display *)param);
+	}
+	while (i < BOARD_HEIGHT)
+	{
+		j = 0;
+		while (j < BOARD_WIDTH)
+		{
+			letter = display->shared->board[i][j];
+			mlx_image_to_window(display->mlx, display->images[letter], j * 64, i * 64);
+			j++;
+		}
+		i++;
+	}
+	display->shared->paint = 0;
+	sem_post(display->sem);
 }

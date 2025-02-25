@@ -1,11 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/25 13:00:46 by psegura-          #+#    #+#             */
+/*   Updated: 2025/02/25 16:02:51 by psegura-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "GAME.h"
+
+void loop_hook(void *param)
+{
+	static double	time = 0.0;
+	t_game          *game;
+
+	game = (t_game *)param;
+	time += game->mlx->delta_time;
+	if (time >= 1.0)
+	{
+		draw_minimap(game);
+		time = 0.0;
+	}
+}
+
+char *gen_team_name(char letter)
+{
+	return (ft_ultrajoin("TEAM_", (char [2]){ft_toupper(letter), '\0'}, NULL));
+}
 
 void	mlx_stuff(t_game *game)
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 
-	mlx = init_and_customize_mlx();
+	mlx = init_and_customize_mlx(gen_team_name(game->letter));
 	game->mlx = mlx;
 	if (load_textures(game) == NULL)
         leave_board(game);
@@ -20,14 +51,9 @@ void	mlx_stuff(t_game *game)
 
     draw_minimap(game);
 	mlx_key_hook(mlx, my_key_hook, game);
+    mlx_loop_hook(mlx, loop_hook, game);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
-}
-
-void print_board(t_shared *shared)
-{
-    for (int i = 0; i < BOARD_HEIGHT; i++)
-        printf("[%d] - [%s]\n", i, shared->board[i]);
 }
 
 int main(int argc, char **argv)

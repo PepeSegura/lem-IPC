@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hooks.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/25 12:50:25 by psegura-          #+#    #+#             */
+/*   Updated: 2025/02/25 15:27:57 by psegura-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "GAME.h"
 
-void leave_board(t_game *game)
+void	leave_board(t_game *game)
 {
 	int	close_game = 0;
 
@@ -15,16 +27,16 @@ void leave_board(t_game *game)
 		sem_close(game->sem);
 	if (close_game == 1)
 	{
-        int sem_ret = sem_unlink(SEM_NAME);
+		int	sem_ret = sem_unlink(SEM_NAME);
 		if (sem_ret == -1)
 		{
-        	perror("sem_unlink");
+			perror("sem_unlink");
 			exit(1);
 		}
 		if (game->shared->display_pid != -42)
 			kill(game->shared->display_pid, SIGUSR1);
 		printf("deleting shared memory\n");
-		int destroy_ret = destroy_memory_block(FILENAME);
+		int	destroy_ret = destroy_memory_block(FILENAME, false);
 		if (destroy_ret == 1)
 			printf("Cannot clear shared memory, close first the display\n");
 	}
@@ -38,11 +50,11 @@ void	close_player(t_game *game)
 	exit(0);
 }
 
-char *get_player_pos(int x, int y)
+char	*get_player_pos(int x, int y)
 {
-	char *str_x = ft_itoa(x);
-	char *str_y = ft_itoa(y);
-	char *final = ft_ultrajoin("Player pos: (", str_x, ",", str_y, ")", NULL);
+	char	*str_x = ft_itoa(x);
+	char	*str_y = ft_itoa(y);
+	char	*final = ft_ultrajoin("Player pos: (", str_x, ",", str_y, ")", NULL);
 
 	free(str_x), free(str_y);
 	return (final);
@@ -50,12 +62,12 @@ char *get_player_pos(int x, int y)
 
 static void	write_player_pos(t_game *game)
 {
-	char *player_pos = get_player_pos(game->y, game->x);
+	char	*player_pos = get_player_pos(game->y, game->x);
 	game->str_img = mlx_put_string(game->mlx, player_pos, TILE / 10, TILE / 10);
 	free(player_pos);
 }
 
-static void check_pos(t_game *game, char (*array)[256], int pos_x, int pos_y)
+static void	check_pos(t_game *game, char (*array)[256], int pos_x, int pos_y)
 {
 	if ((pos_x < 0 || pos_x >= BOARD_WIDTH) || (pos_y < 0 || pos_y >= BOARD_HEIGHT))
 		return ;
@@ -63,9 +75,9 @@ static void check_pos(t_game *game, char (*array)[256], int pos_x, int pos_y)
 		(*array)[(int)game->shared->board[pos_y][pos_x]] += 1;
 }
 
-static int is_surrounded(t_game *game)
+static int	is_surrounded(t_game *game)
 {
-	char array[256];
+	char	array[256];
 
 	ft_memset(array, 0, sizeof(array));
 
@@ -96,7 +108,7 @@ static int is_surrounded(t_game *game)
 	return (false);
 }
 
-static void restore_pos(t_game *game, int x, int y)
+static void	restore_pos(t_game *game, int x, int y)
 {
 	game->x -= x;
 	game->y -= y;
@@ -104,7 +116,7 @@ static void restore_pos(t_game *game, int x, int y)
 	write_player_pos(game);
 }
 
-static int is_a_valid_move(t_game *game, int x, int y)
+static int	is_a_valid_move(t_game *game, int x, int y)
 {
 
 	if ((game->x < 0 || game->x >= BOARD_WIDTH) || (game->y < 0 || game->y >= BOARD_HEIGHT))
@@ -122,8 +134,8 @@ static int is_a_valid_move(t_game *game, int x, int y)
 
 static void	movement(t_game *game, int key)
 {
-	int x = 0;
-	int y = 0;
+	int	x = 0;
+	int	y = 0;
 
 	if (key == MLX_KEY_UP)		y = -1;
 	if (key == MLX_KEY_LEFT)	x = -1;
@@ -149,7 +161,7 @@ static void	movement(t_game *game, int key)
 	write_player_pos(game);
 }
 
-static void paint_cord(t_game *game, int pos_x, int pos_y, int x, int y)
+static void	paint_cord(t_game *game, int pos_x, int pos_y, int x, int y)
 {
 	if ((pos_x < 0 || pos_x >= BOARD_WIDTH) || (pos_y < 0 || pos_y >= BOARD_HEIGHT))
 	{
@@ -160,7 +172,7 @@ static void paint_cord(t_game *game, int pos_x, int pos_y, int x, int y)
 }
 
 
-void draw_minimap(t_game *game)
+void	draw_minimap(t_game *game)
 {
 	sem_wait(game->sem);
 
@@ -184,7 +196,7 @@ void draw_minimap(t_game *game)
 
 void	my_key_hook(mlx_key_data_t keydata, void *param)
 {
-	t_game *game = (t_game *)param;
+	t_game	*game = (t_game *)param;
 	if (keydata.action != MLX_PRESS)
 		return ;
 	if (keydata.key == MLX_KEY_ESCAPE)
