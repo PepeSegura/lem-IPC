@@ -46,4 +46,7 @@ void	*load_textures(t_game *player);
 void	close_player(t_game *game);
 void    leave_board(t_game *game);
 
+/* opponents */
+int find_nearest_oponent(t_game *game_data);
+
 #endif

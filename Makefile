@@ -46,6 +46,8 @@ GAME       = 											\
 				srcs/game/init_player/init_player.c		\
 				srcs/game/init_game/init_structs.c		\
 														\
+				srcs/game/opponents/find_nearest.c		\
+														\
 				srcs/game/mlx/init_mlx.c				\
                	srcs/game/mlx/hooks.c					\
                	$(SHARED)

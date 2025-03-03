@@ -19,6 +19,8 @@
 # define BOARD_WIDTH    10
 # define BOARD_HEIGHT   10
 
+# define BOARD_SIZE (BOARD_WIDTH * BOARD_HEIGHT)
+
 # define BLOCK_SIZE     1024
 # define FILENAME       "Makefile"
 

@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:50:25 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/25 17:05:40 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:34:49 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,11 @@ void	my_key_hook(mlx_key_data_t keydata, void *param)
 	t_game	*game = (t_game *)param;
 	if (keydata.action != MLX_PRESS)
 		return ;
+	if (keydata.key == MLX_KEY_F)
+	{
+		find_nearest_oponent(game);
+		return;
+	}
 	if (keydata.key == MLX_KEY_ESCAPE)
 		close_player(game);
 	if (game->str_img)
