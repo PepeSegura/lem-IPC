@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:59:14 by psegura-          #+#    #+#             */
-/*   Updated: 2025/03/05 10:41:09 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/09 20:39:19 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef struct s_player_position
 
 typedef struct s_closest_oponent
 {
-	int distance;
+	int	distance;
 	int x;
 	int y;
 }   t_closest_oponent;
@@ -85,7 +85,7 @@ int	fill_opponents_array(t_player_position *opponents, t_game *game_data)
 		{
 			if (game_data->shared->board[y][x] != game_data->letter && game_data->shared->board[y][x] != '0')
 			{
-				printf("OP_TEAM: %c\n", game_data->shared->board[y][x]);
+				// printf("OP_TEAM: %c\n", game_data->shared->board[y][x]);
 				opponents[opponents_count].team = game_data->shared->board[y][x];
 				opponents[opponents_count].x = x;
 				opponents[opponents_count].y = y;
@@ -108,8 +108,8 @@ int	find_nearest_oponent(t_game *game_data)
 
 	int our_team_count = fill_our_team_array(our_team, game_data);
 	int opponents_count = fill_opponents_array(opponents, game_data);
-	printf("our_team_count:  [%d]\n", our_team_count);
-	printf("opponents_count: [%d]\n", opponents_count);
+	// printf("our_team_count:  [%d]\n", our_team_count);
+	// printf("opponents_count: [%d]\n", opponents_count);
 
 	t_closest_oponent closest_oponents[26] = {0};
 
@@ -122,9 +122,9 @@ int	find_nearest_oponent(t_game *game_data)
 		for (int j = 0; j < our_team_count; j++)
 			total_distance += calc_distance(our_team[j], opponents[i].x, opponents[i].y);
 		
-		printf("TOTAAAAL distance: %d\n", total_distance);
+		// printf("TOTAAAAL distance: %d\n", total_distance);
 		int team_name_offset = opponents[i].team - 'a';
-		printf("index: %d - distance node: %d\n", team_name_offset, closest_oponents[team_name_offset].distance);
+		// printf("index: %d - distance node: %d\n", team_name_offset, closest_oponents[team_name_offset].distance);
 		if (total_distance < closest_oponents[team_name_offset].distance)
 		{
 			closest_oponents[team_name_offset].distance = total_distance;
@@ -133,29 +133,40 @@ int	find_nearest_oponent(t_game *game_data)
 		}
 	}
 
-	printf("Closest opponent distances and coordinates for team A:\n");
+	// printf("Closest opponent distances and coordinates for team A:\n");
 	int	min_distance = INT32_MAX;
 	for (int i = 0; i < 26; i++)
 	{
 		if (closest_oponents[i].distance != INT32_MAX)
 		{
-			printf("BEEEEFFFF - Opponent Team: %c, Total Distance: %d, Coordinates: (%d, %d)\n", i + 'A', closest_oponents[i].distance, closest_oponents[i].x, closest_oponents[i].y);
+			// printf("BEEEEFFFF - Opponent Team: %c, Total Distance: %d, Coordinates: (%d, %d)\n", i + 'A', closest_oponents[i].distance, closest_oponents[i].x, closest_oponents[i].y);
 			if (closest_oponents[i].distance < min_distance)
-			{
 				min_distance = closest_oponents[i].distance;
-			}
 		}
 	}
 
+	t_msg message = {.mtype = 1, .y = -1, .x = -1};
+
 	for (int i = 0; i < 26; i++)
 	{
+		if (closest_oponents[i].distance == INT32_MAX)
+			continue;
 		if (closest_oponents[i].distance == min_distance)
 		{
-			printf("FINALLLLLL - Opponent Team: %c, Total Distance: %d, Coordinates: (%d, %d)\n", i + 'A', closest_oponents[i].distance, closest_oponents[i].x, closest_oponents[i].y);
-			game_data->opponent.x = closest_oponents[i].x;
-			game_data->opponent.y = closest_oponents[i].y;
+			printf("Closest Opponent:\n");
+			printf("Team_%c, Total Distance: %d, Coordinates: (%d, %d)\n", i + 'A', closest_oponents[i].distance, closest_oponents[i].x, closest_oponents[i].y);
+			message.x = closest_oponents[i].x;
+			message.y = closest_oponents[i].y;
 			break;
 		}
 	}
+
+	if (message.y == -1 || message.x == -1)
+	{
+		printf("No oponent was found.\n");
+		return (0);
+	}
+
+	msgsnd(game_data->queue_id, &message, sizeof(message) - sizeof(long), 0);
 	return (0);
 }

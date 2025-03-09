@@ -6,11 +6,24 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 13:00:46 by psegura-          #+#    #+#             */
-/*   Updated: 2025/03/09 15:06:35 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/09 20:20:06 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "GAME.h"
+
+void print_msg(t_game *game)
+{
+	if (game->queue_id == -1)
+		return;
+	t_msg	message = {.x = -1, .y = -1};
+
+	if (msgrcv(game->queue_id, &message, sizeof(message) - sizeof(long), 1, IPC_NOWAIT) == -1)
+		return;
+	if (message.x == -1 || message.y == -1)
+		return;
+	printf("Msg new pos: (%d,%d)\n", message.y, message.x);
+}
 
 void loop_hook(void *param)
 {
@@ -23,6 +36,7 @@ void loop_hook(void *param)
 	{
 		if (exit_signal == 1)
 			close_player(game);
+		print_msg(game);
 		draw_minimap(game);
 		time = 0.0;
 	}
