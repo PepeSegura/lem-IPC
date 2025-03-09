@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:59:14 by psegura-          #+#    #+#             */
-/*   Updated: 2025/03/03 19:16:20 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/05 10:41:09 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,8 @@ int	find_nearest_oponent(t_game *game_data)
 		if (closest_oponents[i].distance == min_distance)
 		{
 			printf("FINALLLLLL - Opponent Team: %c, Total Distance: %d, Coordinates: (%d, %d)\n", i + 'A', closest_oponents[i].distance, closest_oponents[i].x, closest_oponents[i].y);
+			game_data->opponent.x = closest_oponents[i].x;
+			game_data->opponent.y = closest_oponents[i].y;
 			break;
 		}
 	}

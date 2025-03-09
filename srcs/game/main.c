@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 13:00:46 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/25 17:05:25 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/09 15:06:35 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void loop_hook(void *param)
 	time += game->mlx->delta_time;
 	if (time >= 1.0)
 	{
+		if (exit_signal == 1)
+			close_player(game);
 		draw_minimap(game);
 		time = 0.0;
 	}
@@ -36,6 +38,8 @@ void	mlx_stuff(t_game *game)
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 
+	if (exit_signal == 1)
+		exit(0);
 	mlx = init_and_customize_mlx(gen_team_name(game->letter));
 	game->mlx = mlx;
 	if (load_textures(game) == NULL)
@@ -56,8 +60,18 @@ void	mlx_stuff(t_game *game)
 	mlx_terminate(mlx);
 }
 
+
+void sig_handler(int signum)
+{
+	ft_dprintf(2, "Closing player: signal(%d) - %s\n", signum, strsignal(signum));
+	exit_signal = 1;
+}
+
+int exit_signal = 0;
+
 int main(int argc, char **argv)
 {
+	signal(SIGINT, sig_handler);
     char team_name = parser(argc, argv);
 
     t_game player;
@@ -73,6 +87,6 @@ int main(int argc, char **argv)
     init_player(&player, shared, team_name);
     
     sem_post(player.sem);
-    mlx_stuff(&player);
+	mlx_stuff(&player);
 	leave_board(&player);
 }

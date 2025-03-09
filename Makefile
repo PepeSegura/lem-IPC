@@ -24,6 +24,7 @@ LIBS        += $(LIBFT)/libft.a
 SHARED		=											\
 				srcs/shared/errors.c					\
                	srcs/shared/shmemory.c					\
+               	srcs/shared/msg_queue.c					\
                	srcs/shared/tools.c						\
 
 DISPLAY      = 											\

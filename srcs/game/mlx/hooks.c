@@ -6,11 +6,25 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:50:25 by psegura-          #+#    #+#             */
-/*   Updated: 2025/03/03 14:34:49 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/09 17:53:05 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "GAME.h"
+
+void close_team(t_game *game)
+{
+	if (game->shared->players_count[(int)game->letter] == 0)
+	{
+		printf("Destroying queue for team %c\n", ft_toupper(game->letter));
+		int ret = destroy_msg_queue(FILENAME, game->letter);
+		if (ret == -1)
+		{
+			perror("destry_msg_queue");
+			printf("can't destroy queue");
+		}
+	}
+}
 
 void	leave_board(t_game *game)
 {
@@ -20,6 +34,8 @@ void	leave_board(t_game *game)
 	game->shared->board[game->y][game->x] = '0';
 	game->shared->paint = 1;
 	game->shared->players--;
+	game->shared->players_count[(int)game->letter]--;
+	close_team(game);
 	if (game->shared->players == 0)
 		close_game = 1;
 	sem_post(game->sem);
@@ -134,7 +150,7 @@ static int	is_a_valid_move(t_game *game, int x, int y)
 	return (true);
 }
 
-static void	movement(t_game *game, int key)
+void	movement(t_game *game, int key)
 {
 	int	x = 0;
 	int	y = 0;
@@ -206,7 +222,12 @@ void	my_key_hook(mlx_key_data_t keydata, void *param)
 		find_nearest_oponent(game);
 		return;
 	}
-	if (keydata.key == MLX_KEY_ESCAPE)
+	if (keydata.key == MLX_KEY_C)
+	{
+		find_nearest_oponent(game);
+		return;
+	}
+	if (keydata.key == MLX_KEY_ESCAPE || exit_signal == 1)
 		close_player(game);
 	if (game->str_img)
 		mlx_delete_image(game->mlx, game->str_img);

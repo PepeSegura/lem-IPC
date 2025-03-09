@@ -9,6 +9,12 @@
 # define TILE 64
 # define WALL 0
 
+typedef struct s_pos
+{
+    int y;
+    int x;
+}   t_pos;
+
 typedef struct s_game
 {
     char        letter;
@@ -16,13 +22,16 @@ typedef struct s_game
 	mlx_image_t	*img;
     mlx_image_t *str_img;
 	mlx_image_t	*images[256];
+    t_pos       opponent;
     int         x;
     int         y;
     int         status;
     sem_t       *sem;
+    int         queue_id;
     t_shared    *shared;
 } t_game;
 
+extern int exit_signal;
 
 /* parser */
 char    parser(int argc, char **argv);
