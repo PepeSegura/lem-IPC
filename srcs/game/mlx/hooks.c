@@ -6,18 +6,29 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:50:25 by psegura-          #+#    #+#             */
-/*   Updated: 2025/03/09 17:53:05 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/10 16:38:49 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "GAME.h"
 
+void	set_team_master(t_game *game)
+{
+	if (game->shared->teams_masters_pids[(int)game->team_name] == 0)
+	{
+		printf("Master from Team_%c created!!!\n", ft_toupper(game->team_name));
+		game->shared->teams_masters_pids[(int)game->team_name] = game->own_pid;
+	}
+}
+
 void close_team(t_game *game)
 {
-	if (game->shared->players_count[(int)game->letter] == 0)
+	if (game->own_pid == game->shared->teams_masters_pids[(int)game->team_name])
+		game->shared->teams_masters_pids[(int)game->team_name] = 0;
+	if (game->shared->teams_players_count[(int)game->team_name] == 0)
 	{
-		printf("Destroying queue for team %c\n", ft_toupper(game->letter));
-		int ret = destroy_msg_queue(FILENAME, game->letter);
+		printf("Destroying queue for team %c\n", ft_toupper(game->team_name));
+		int ret = destroy_msg_queue(FILENAME, game->team_name);
 		if (ret == -1)
 		{
 			perror("destry_msg_queue");
@@ -33,10 +44,10 @@ void	leave_board(t_game *game)
 	sem_wait(game->sem);
 	game->shared->board[game->y][game->x] = '0';
 	game->shared->paint = 1;
-	game->shared->players--;
-	game->shared->players_count[(int)game->letter]--;
+	game->shared->total_players_count--;
+	game->shared->teams_players_count[(int)game->team_name]--;
 	close_team(game);
-	if (game->shared->players == 0)
+	if (game->shared->total_players_count == 0)
 		close_game = 1;
 	sem_post(game->sem);
 	if (game->sem != SEM_FAILED)
@@ -115,7 +126,7 @@ static int	is_surrounded(t_game *game)
 
 	for (int letter = 'a'; letter < 'z'; letter++)
 	{
-		if (array[letter] > 1 && letter != game->letter)
+		if (array[letter] > 1 && letter != game->team_name)
 		{
 			printf("Closing game...\nYou have been sorrounded by TEAM_[%c] with [%d] players\n", ft_toupper(letter), array[letter]);
 			sem_post(game->sem);
@@ -172,7 +183,7 @@ void	movement(t_game *game, int key)
 		return ;
 
 	game->shared->board[game->y - y][game->x - x] = '0';
-	game->shared->board[game->y][game->x] = game->letter;
+	game->shared->board[game->y][game->x] = game->team_name;
 	game->shared->paint = 1;
 
 	sem_post(game->sem);

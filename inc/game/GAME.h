@@ -23,7 +23,7 @@ typedef struct s_msg
 
 typedef struct s_game
 {
-	char		letter;
+	char		team_name;
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 	mlx_image_t	*str_img;
@@ -34,6 +34,7 @@ typedef struct s_game
 	int			status;
 	sem_t		*sem;
 	int			queue_id;
+	int			own_pid;
 	t_shared	*shared;
 }				t_game;
 
@@ -46,6 +47,8 @@ char			parser(int argc, char **argv);
 void			init_game(t_shared *shared);
 void			init_semaphores(t_game *game);
 t_shared		*attach_or_create_shared_memory(void);
+
+void			set_team_master(t_game *game);
 
 /* init_player */
 char			*get_player_pos(int x, int y);

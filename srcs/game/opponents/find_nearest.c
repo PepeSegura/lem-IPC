@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:59:14 by psegura-          #+#    #+#             */
-/*   Updated: 2025/03/09 20:39:19 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/10 16:43:17 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ int	fill_our_team_array(t_player_position *our_team, t_game *game_data)
 	{
 		for (size_t x = 0; x < BOARD_WIDTH; x++)
 		{
-			if (game_data->shared->board[y][x] == game_data->letter)
+			if (game_data->shared->board[y][x] == game_data->team_name)
 			{
-				our_team[team_count].team = game_data->letter;
+				our_team[team_count].team = game_data->team_name;
 				our_team[team_count].x = x;
 				our_team[team_count].y = y;
 				our_team[team_count].distance = 0;
@@ -83,7 +83,7 @@ int	fill_opponents_array(t_player_position *opponents, t_game *game_data)
 	{
 		for (size_t x = 0; x < BOARD_WIDTH; x++)
 		{
-			if (game_data->shared->board[y][x] != game_data->letter && game_data->shared->board[y][x] != '0')
+			if (game_data->shared->board[y][x] != game_data->team_name && game_data->shared->board[y][x] != '0')
 			{
 				// printf("OP_TEAM: %c\n", game_data->shared->board[y][x]);
 				opponents[opponents_count].team = game_data->shared->board[y][x];
@@ -167,6 +167,9 @@ int	find_nearest_oponent(t_game *game_data)
 		return (0);
 	}
 
-	msgsnd(game_data->queue_id, &message, sizeof(message) - sizeof(long), 0);
+	sem_wait(game_data->sem);
+	if (game_data->own_pid == game_data->shared->teams_masters_pids[(int)game_data->team_name])
+		msgsnd(game_data->queue_id, &message, sizeof(message) - sizeof(long), 0);
+	sem_post(game_data->sem);
 	return (0);
 }

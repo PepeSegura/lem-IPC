@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 13:00:23 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/25 16:07:16 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/10 13:10:41 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ mlx_t	*init_and_customize_mlx(void)
 	return (mlx);
 }
 
-char	*gen_filename(char letter)
+char	*gen_filename(char team_name)
 {
-	return (ft_ultrajoin("sprites/", (char [2]){letter, '\0'}, ".png", NULL));
+	return (ft_ultrajoin("sprites/", (char [2]){team_name, '\0'}, ".png", NULL));
 }
 
 void	*load_textures(t_display *display)
@@ -35,12 +35,12 @@ void	*load_textures(t_display *display)
 	display->images['0'] = mlx_load_img(display->mlx, "sprites/blank.png");
 	if (display->images['0'] == NULL)
 		return (NULL);
-	for (unsigned char letter = 'a'; letter <= 'z'; letter++)
+	for (unsigned char team_name = 'a'; team_name <= 'z'; team_name++)
 	{
-		char	*name = gen_filename(letter);
-		display->images[letter] = mlx_load_img(display->mlx, name);
+		char	*name = gen_filename(team_name);
+		display->images[team_name] = mlx_load_img(display->mlx, name);
 		free(name);
-		if (display->images[letter] == NULL)
+		if (display->images[team_name] == NULL)
 			return (NULL);
 	}
 	return ((void *)1);

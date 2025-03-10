@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:45:59 by psegura-          #+#    #+#             */
-/*   Updated: 2025/02/25 12:46:31 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:52:29 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	init_game(t_shared *shared)
 	{
 		shared->started = 1;
 		shared->paint = 1;
-		shared->players = 0;
+		shared->total_players_count = 0;
 		shared->display_pid = -42;
 		fill_board(shared);
 	}

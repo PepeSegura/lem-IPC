@@ -29,12 +29,15 @@
 typedef struct s_shared
 {
 	int		started;
-	int		players;
+	int		total_players_count;
 	int		paint;
+
 	int		display_pid;
-	char	players_count[256];
+
 	char	board[BOARD_HEIGHT][BOARD_WIDTH + 1];
-	char	msg[BLOCK_SIZE];
+
+	char	teams_players_count[256];
+	pid_t	teams_masters_pids[256];
 }			t_shared;
 
 mlx_image_t	*mlx_load_img(mlx_t *mlx, char *name);

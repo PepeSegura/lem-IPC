@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 13:00:46 by psegura-          #+#    #+#             */
-/*   Updated: 2025/03/09 20:20:06 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/10 16:41:48 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void print_msg(t_game *game)
 {
+	if (game->own_pid == game->shared->teams_masters_pids[(int)game->team_name])
+		return;
 	if (game->queue_id == -1)
 		return;
 	t_msg	message = {.x = -1, .y = -1};
@@ -36,15 +38,18 @@ void loop_hook(void *param)
 	{
 		if (exit_signal == 1)
 			close_player(game);
+		sem_wait(game->sem);
 		print_msg(game);
+		set_team_master(game);
+		sem_post(game->sem);
 		draw_minimap(game);
 		time = 0.0;
 	}
 }
 
-char *gen_team_name(char letter)
+char *gen_team_name(char team_name)
 {
-	return (ft_ultrajoin("TEAM_", (char [2]){ft_toupper(letter), '\0'}, NULL));
+	return (ft_ultrajoin("TEAM_", (char [2]){ft_toupper(team_name), '\0'}, NULL));
 }
 
 void	mlx_stuff(t_game *game)
@@ -54,7 +59,7 @@ void	mlx_stuff(t_game *game)
 
 	if (exit_signal == 1)
 		exit(0);
-	mlx = init_and_customize_mlx(gen_team_name(game->letter));
+	mlx = init_and_customize_mlx(gen_team_name(game->team_name));
 	game->mlx = mlx;
 	if (load_textures(game) == NULL)
         leave_board(game);

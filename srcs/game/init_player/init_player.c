@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:42:51 by psegura-          #+#    #+#             */
-/*   Updated: 2025/03/09 17:53:38 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/10 13:11:56 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ void	set_random_player_pos(t_shared *shared, t_game *player)
 
 void	init_player(t_game *game, t_shared *shared, char team_name)
 {
-	if (shared->players_count[(int)team_name] >=2)
+	if (shared->teams_players_count[(int)team_name] >=2)
 	{
 		printf("Can't join game: Team %c is already full\n", ft_toupper(team_name));
 		sem_post(game->sem);
 		exit(1);
 	}
-	if (shared->players_count[(int)team_name] == 0)
+	if (shared->teams_players_count[(int)team_name] == 0)
 	{
 		printf("Creating queue for team %c\n", ft_toupper(team_name));
 		game->queue_id = get_or_create_msg_queue(FILENAME, team_name, true);
@@ -62,12 +62,16 @@ void	init_player(t_game *game, t_shared *shared, char team_name)
 		printf("Getting queue for team %c\n", ft_toupper(team_name));
 		game->queue_id = get_or_create_msg_queue(FILENAME, team_name, false);
 	}
+
+
 	set_random_player_pos(shared, game);
 	printf("new game pos: (%d,%d)\n", game->x, game->y);
 	game->shared = shared;
-	game->letter = team_name;
-	shared->board[game->y][game->x] = game->letter;
+	game->team_name = team_name;
+	shared->board[game->y][game->x] = game->team_name;
 	shared->paint = 1;
-	shared->players++;
-	shared->players_count[(int)team_name]++;
+	shared->total_players_count++;
+	shared->teams_players_count[(int)team_name]++;
+	game->own_pid = getpid();
+	set_team_master(game);
 }
