@@ -23,12 +23,16 @@ typedef struct s_msg
 
 typedef struct s_game
 {
-	char		team_name;
-	mlx_t		*mlx;
-	mlx_image_t	*img;
-	mlx_image_t	*str_img;
-	mlx_image_t	*images[256];
-	// t_pos		opponent;
+	char			team_name;
+
+	bool			hunt_mode;
+
+	mlx_t			*mlx;
+	mlx_image_t		*img;
+	mlx_image_t		*str_img;
+	mlx_image_t		*images[256];
+
+	t_pos		opponent;
 	int			y;
 	int			x;
 	int			status;
@@ -64,7 +68,11 @@ void			*load_textures(t_game *player);
 void			close_player(t_game *game);
 void			leave_board(t_game *game);
 
+bool			movement(t_game *game, int key);
+void			chase_opponent(t_game *game);
+
+
 /* opponents */
-int				find_nearest_oponent(t_game *game_data);
+void				find_nearest_oponent(t_game *game_data);
 
 #endif

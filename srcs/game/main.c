@@ -6,13 +6,13 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 13:00:46 by psegura-          #+#    #+#             */
-/*   Updated: 2025/03/10 16:41:48 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/12 18:23:48 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "GAME.h"
 
-void print_msg(t_game *game)
+void read_msg_queue(t_game *game)
 {
 	if (game->own_pid == game->shared->teams_masters_pids[(int)game->team_name])
 		return;
@@ -20,11 +20,19 @@ void print_msg(t_game *game)
 		return;
 	t_msg	message = {.x = -1, .y = -1};
 
-	if (msgrcv(game->queue_id, &message, sizeof(message) - sizeof(long), 1, IPC_NOWAIT) == -1)
+	while(1)
+	{
+		if (msgrcv(game->queue_id, &message, sizeof(message) - sizeof(long), 1, IPC_NOWAIT) == -1)
+			break;
+		game->opponent.y = message.y;
+		game->opponent.x = message.x;
+	}
+
+
+	if (game->opponent.x == -1 || game->opponent.y == -1)
 		return;
-	if (message.x == -1 || message.y == -1)
-		return;
-	printf("Msg new pos: (%d,%d)\n", message.y, message.x);
+	
+	// printf("Opponent new pos: (%d,%d)\n", game->opponent.y, game->opponent.x);
 }
 
 void loop_hook(void *param)
@@ -34,14 +42,18 @@ void loop_hook(void *param)
 
 	game = (t_game *)param;
 	time += game->mlx->delta_time;
-	if (time >= 1.0)
+	if (time >= 1.00)
 	{
 		if (exit_signal == 1)
 			close_player(game);
+		if (game->hunt_mode == true)
+			find_nearest_oponent(game);
 		sem_wait(game->sem);
-		print_msg(game);
+		read_msg_queue(game);
 		set_team_master(game);
 		sem_post(game->sem);
+		if (game->hunt_mode == true)
+			chase_opponent(game);
 		draw_minimap(game);
 		time = 0.0;
 	}

@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:42:51 by psegura-          #+#    #+#             */
-/*   Updated: 2025/03/10 13:11:56 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/12 18:26:46 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	init_player(t_game *game, t_shared *shared, char team_name)
 
 
 	set_random_player_pos(shared, game);
-	printf("new game pos: (%d,%d)\n", game->x, game->y);
 	game->shared = shared;
 	game->team_name = team_name;
 	shared->board[game->y][game->x] = game->team_name;
@@ -73,5 +72,8 @@ void	init_player(t_game *game, t_shared *shared, char team_name)
 	shared->total_players_count++;
 	shared->teams_players_count[(int)team_name]++;
 	game->own_pid = getpid();
+	game->hunt_mode = true;
+	game->opponent.y = -1;
+	game->opponent.x = -1;
 	set_team_master(game);
 }

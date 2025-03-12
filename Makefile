@@ -48,6 +48,7 @@ GAME       = 											\
 				srcs/game/init_game/init_structs.c		\
 														\
 				srcs/game/opponents/find_nearest.c		\
+				srcs/game/opponents/chase_opponent.c	\
 														\
 				srcs/game/mlx/init_mlx.c				\
                	srcs/game/mlx/hooks.c					\

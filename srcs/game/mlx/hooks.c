@@ -6,7 +6,7 @@
 /*   By: psegura- <psegura-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:50:25 by psegura-          #+#    #+#             */
-/*   Updated: 2025/03/10 16:38:49 by psegura-         ###   ########.fr       */
+/*   Updated: 2025/03/12 18:25:30 by psegura-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	set_team_master(t_game *game)
 {
 	if (game->shared->teams_masters_pids[(int)game->team_name] == 0)
 	{
-		printf("Master from Team_%c created!!!\n", ft_toupper(game->team_name));
+		printf("Master from Team_%c created.\n", ft_toupper(game->team_name));
 		game->shared->teams_masters_pids[(int)game->team_name] = game->own_pid;
 	}
 }
@@ -91,6 +91,8 @@ char	*get_player_pos(int x, int y)
 
 static void	write_player_pos(t_game *game)
 {
+	if (game->str_img)
+		mlx_delete_image(game->mlx, game->str_img);
 	char	*player_pos = get_player_pos(game->y, game->x);
 	game->str_img = mlx_put_string(game->mlx, player_pos, TILE / 10, TILE / 10);
 	free(player_pos);
@@ -128,7 +130,7 @@ static int	is_surrounded(t_game *game)
 	{
 		if (array[letter] > 1 && letter != game->team_name)
 		{
-			printf("Closing game...\nYou have been sorrounded by TEAM_[%c] with [%d] players\n", ft_toupper(letter), array[letter]);
+			printf("You have been sorrounded by TEAM_[%c] with [%d] players\nClosing game...\n", ft_toupper(letter), array[letter]);
 			sem_post(game->sem);
 			close_player(game);
 			return (true);
@@ -161,7 +163,7 @@ static int	is_a_valid_move(t_game *game, int x, int y)
 	return (true);
 }
 
-void	movement(t_game *game, int key)
+bool	movement(t_game *game, int key)
 {
 	int	x = 0;
 	int	y = 0;
@@ -174,13 +176,13 @@ void	movement(t_game *game, int key)
 	sem_wait(game->sem);
 
 	if (is_surrounded(game) == true)
-		return ;
+		return (false);
 
 	game->x += x;
 	game->y += y;
 
 	if (is_a_valid_move(game, x, y) == false)
-		return ;
+		return (false);
 
 	game->shared->board[game->y - y][game->x - x] = '0';
 	game->shared->board[game->y][game->x] = game->team_name;
@@ -188,7 +190,9 @@ void	movement(t_game *game, int key)
 
 	sem_post(game->sem);
 	write_player_pos(game);
+	return (true);
 }
+
 
 static void	paint_cord(t_game *game, int pos_x, int pos_y, int x, int y)
 {
@@ -228,20 +232,14 @@ void	my_key_hook(mlx_key_data_t keydata, void *param)
 	t_game	*game = (t_game *)param;
 	if (keydata.action != MLX_PRESS)
 		return ;
-	if (keydata.key == MLX_KEY_F)
-	{
-		find_nearest_oponent(game);
-		return;
-	}
 	if (keydata.key == MLX_KEY_C)
 	{
-		find_nearest_oponent(game);
+		game->hunt_mode = !game->hunt_mode;
+		printf("Hunt mode: %d\n", game->hunt_mode);
 		return;
 	}
 	if (keydata.key == MLX_KEY_ESCAPE || exit_signal == 1)
 		close_player(game);
-	if (game->str_img)
-		mlx_delete_image(game->mlx, game->str_img);
 	movement(game, keydata.key);
 	draw_minimap(game);
 }
